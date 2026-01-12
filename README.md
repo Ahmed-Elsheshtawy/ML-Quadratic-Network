@@ -91,13 +91,13 @@ $$
 \end{align*}
 $$
 
-### **Weight Update Rule**
+### **Parameter Update Rule**
 
 $$
 \begin{align*}
-w &\leftarrow w - \mathrm{learningRate} \cdot \mathrm{gradient} \\
-b &\leftarrow b - \mathrm{learningRate} \cdot \mathrm{gradient}
-\end{align*}
+w_{new} =  w_{old} - \mathrm{learningRate} \cdot \mathrm{   \frac{\partial L}{\partial w}} \\ \\
+b_{new} = b_{old} - \mathrm{learningRate} \cdot \mathrm{\frac{\partial L}{\partial b}}
+\end{align*} \\
 $$
 
 ## **Results**
@@ -123,9 +123,11 @@ The network achieved training loss of ~1070 and test loss of ~13,856, outputting
 
 **Model Capacity**: A single sigmoid neuron cannot learn non-monotonic functions like $x^2$. The network converged to a local minimum where predicting a constant minimizes average loss.
 
+**Memorization**: Due to the model insufficient complexity, all predicted outputs are $~36$, which means the model adjusted its parameters to minimize its loss as much as possible, and the best it could do was when the predicted output was $36$, and the loss then was $13856.675.$
+
 **Numerical Stability**: Fixed overflow errors in sigmoid calculation, gradient computation, and loss calculation through conditional computation and gradient clipping.
 
-**Initialization and Learning Rate**: Large initial weights [-100, 100] caused saturation. Small weights [-1, 1] with learning rate 0.001 enabled stable training but couldn't overcome architectural limitations.
+**Initialization and Learning Rate**: Large initial weights $[-100, 100]$ caused saturation. Small weights $[-1, 1]$ with learning rate $0.001$ enabled stable training but couldn't overcome architectural limitations.
 
 ## **Challenges Addressed**
 - Overflow in sigmoid function from large exponents
