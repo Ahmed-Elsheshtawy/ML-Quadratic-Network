@@ -34,11 +34,11 @@ The goal is to explore:
 
 $$
 \begin{align*}
-\text{n1\_input} &= w_1 \cdot x + b_1 \\
-\text{n1\_output} &= \text{sigmoid}(\text{n1\_input}) \\
-\text{n2\_input} &= w_2 \cdot \text{n1\_output} + b_2 \\
-\text{n2\_output} &= \text{n2\_input} \text{ (linear activation)} \\
-\text{output} &= w_3 \cdot \text{n2\_output} + b_3
+\textit{n1Input} &= w_1 \cdot x + b_1 \\
+\textit{n1Output} &= \text{sigmoid}(\textit{n1Input}) \\
+\textit{n2Input} &= w_2 \cdot \textit{n1Output} + b_2 \\
+\textit{n2Output} &= \textit{n2Input} \text{ (linear activation)} \\
+\textit{output} &= w_3 \cdot \textit{n2Output} + b_3
 \end{align*}
 $$
 
@@ -66,14 +66,14 @@ $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \text{output}} \cdot \text{n2\_output} \\
+\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \text{output}} \cdot \textit{n2Output} \\
 \frac{\partial L}{\partial b_3} &= \frac{\partial L}{\partial \text{output}}
 \end{align*}
 $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot \text{n1\_output} \\
+\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot \textit{n1Output} \\
 \frac{\partial L}{\partial b_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3
 \end{align*}
 $$
@@ -86,8 +86,8 @@ $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(\text{n1\_input}) \\
-\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot \sigma'(\text{n1\_input})
+\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(\textit{n1Input}) \\
+\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot \sigma'(\textit{n1Input})
 \end{align*}
 $$
 
@@ -95,8 +95,8 @@ $$
 
 $$
 \begin{align*}
-w &\leftarrow w - \text{learning\_rate} \cdot \text{gradient} \\
-b &\leftarrow b - \text{learning\_rate} \cdot \text{gradient}
+w &\leftarrow w - \textit{learningRate} \cdot \textit{gradient} \\
+b &\leftarrow b - \textit{learningRate} \cdot \textit{gradient}
 \end{align*}
 $$
 
