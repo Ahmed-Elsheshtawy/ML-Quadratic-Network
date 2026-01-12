@@ -34,11 +34,11 @@ The goal is to explore:
 
 $$
 \begin{align*}
-z_1 &= w_1 \cdot x + b_1 \\
-a_1 &= \text{sigmoid}(z_1) \\
-z_2 &= w_2 \cdot a_1 + b_2 \\
-a_2 &= z_2 \text{ (linear activation)} \\
-\hat{y} &= w_3 \cdot a_2 + b_3
+\text{n1\_input} &= w_1 \cdot x + b_1 \\
+\text{n1\_output} &= \text{sigmoid}(\text{n1\_input}) \\
+\text{n2\_input} &= w_2 \cdot \text{n1\_output} + b_2 \\
+\text{n2\_output} &= \text{n2\_input} \text{ (linear activation)} \\
+\text{output} &= w_3 \cdot \text{n2\_output} + b_3
 \end{align*}
 $$
 
@@ -55,26 +55,26 @@ $$
 ### **Loss Function**
 
 $$
-L = (\hat{y} - y)^2
+L = (\text{predicted} - \text{correct})^2
 $$
 
 ### **Backpropagation Gradients**
 
 $$
-\frac{\partial L}{\partial \hat{y}} = 2(\hat{y} - y)
+\frac{\partial L}{\partial \text{output}} = 2(\text{predicted} - \text{correct})
 $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \hat{y}} \cdot a_2 \\
-\frac{\partial L}{\partial b_3} &= \frac{\partial L}{\partial \hat{y}}
+\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \text{output}} \cdot \text{n2\_output} \\
+\frac{\partial L}{\partial b_3} &= \frac{\partial L}{\partial \text{output}}
 \end{align*}
 $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \hat{y}} \cdot w_3 \cdot a_1 \\
-\frac{\partial L}{\partial b_2} &= \frac{\partial L}{\partial \hat{y}} \cdot w_3
+\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot \text{n1\_output} \\
+\frac{\partial L}{\partial b_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3
 \end{align*}
 $$
 
@@ -86,8 +86,8 @@ $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \hat{y}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(z_1) \\
-\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \hat{y}} \cdot w_3 \cdot w_2 \cdot \sigma'(z_1)
+\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(\text{n1\_input}) \\
+\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot \sigma'(\text{n1\_input})
 \end{align*}
 $$
 
@@ -95,62 +95,43 @@ $$
 
 $$
 \begin{align*}
-w &\leftarrow w - \alpha \cdot \frac{\partial L}{\partial w} \\
-b &\leftarrow b - \alpha \cdot \frac{\partial L}{\partial b}
+w &\leftarrow w - \text{learning\_rate} \cdot \text{gradient} \\
+b &\leftarrow b - \text{learning\_rate} \cdot \text{gradient}
 \end{align*}
 $$
 
-where $\alpha$ is the learning rate.
+## **Results**
 
-## **Experiment Results**
+### **Test Loss**
+```
+Test Loss: 13856.675664549257
+```
+### **Correct Outputs**
+```
+Correct Outputs: 
+[225, 144, 121, 0.25, 0.25, 121, 144, 225]
+```
+### **Predicted Outputs**
+```
+Predicted Outputs: 
+[36.66880718269546, 36.66880718269546, 36.66880718269546, 36.66880718270334, 36.66880718271128, 36.668807206517144, 36.66880723051466, 36.66880756944144]
+```
 
-### **Performance**
-- **Training Loss**: ~1070 (final epoch)
-- **Test Loss**: ~13,856
-- **Predicted Outputs**: Network outputs a near-constant value (~36.67) for all inputs
+The network achieved training loss of ~1070 and test loss of ~13,856, outputting a near-constant value (~36.67) for all inputs. This demonstrates complete failure to learn due to insufficient model capacity.
 
-### **Key Observation**
-The network **failed to learn** the quadratic function and instead memorized a single constant value. This demonstrates **underfitting** due to insufficient model capacity.
+## **Key Findings**
 
-## **Lessons Learned**
+**Model Capacity**: A single sigmoid neuron cannot learn non-monotonic functions like $x^2$. The network converged to a local minimum where predicting a constant minimizes average loss.
 
-### **1. Model Capacity Matters**
-A single sigmoid neuron can only learn **monotonic functions** (always increasing or decreasing). The quadratic function f(x) = x² is **non-monotonic** (decreases then increases), requiring multiple neurons to approximate.
+**Numerical Stability**: Fixed overflow errors in sigmoid calculation, gradient computation, and loss calculation through conditional computation and gradient clipping.
 
-### **2. Numerical Stability is Critical**
-Several overflow errors were encountered and fixed:
-- **Sigmoid overflow**: Large inputs cause e^x to overflow → Fixed with conditional computation
-- **Gradient explosion**: Large gradients cause weight divergence → Fixed with gradient clipping
-- **Loss overflow**: Extreme predictions cause loss calculation to fail → Fixed with output clipping
+**Initialization and Learning Rate**: Large initial weights [-100, 100] caused saturation. Small weights [-1, 1] with learning rate 0.001 enabled stable training but couldn't overcome architectural limitations.
 
-### **3. Proper Initialization is Essential**
-- Initial weights in range [-100, 100] caused immediate saturation → No learning
-- Weights in range [-1, 1] allowed gradients to flow → Learning possible (but limited by architecture)
-
-### **4. Learning Rate Tuning**
-- Too small (0.0001): Extremely slow convergence
-- Too large (0.01): Weight divergence and NaN values
-- Balanced (0.001): Stable training without numerical issues
-
-## **Why the Network Failed**
-
-The 1-neuron architecture cannot represent $x^2$ because:
-1. **Symmetry Problem**: $f(-x) = f(x)$, but a single sigmoid path cannot learn this
-2. **Non-Monotonicity**: $x^2$ has a minimum at $x=0$, requiring multiple neurons to approximate
-3. **Local Minimum**: The network found that predicting a constant (~36.67) minimizes average loss better than any function it can represent
-
-## **Next Steps**
-To successfully learn $x^2$, the network would need:
-- **More hidden neurons** (3-5 minimum) to increase representational capacity
-- **Multiple hidden layers** for more complex function approximation
-- **Better activation functions** (ReLU, tanh) that might handle non-linearity better
-
-## **Technical Challenges Solved**
-1. ✅ Overflow in sigmoid function
-2. ✅ Overflow in gradient calculation (exponential terms)
-3. ✅ Overflow in loss calculation
-4. ✅ NaN propagation from exploding gradients
-5. ✅ Weight initialization causing vanishing gradients
+## **Challenges Addressed**
+- Overflow in sigmoid function from large exponents
+- Gradient explosion during backpropagation
+- NaN propagation from numerical instabilities
+- Weight initialization causing vanishing gradients
 
 ## **Conclusion**
-This experiment demonstrates that **neural network architecture must match problem complexity**. A 1-neuron network is fundamentally incapable of learning $x^2$, regardless of training time or hyperparameter tuning. This hands-on experience reinforces the importance of the **universal approximation theorem** in theory versus practical learning in practice.
+This experiment demonstrates that neural network architecture must match problem complexity. A 1-neuron network fundamentally cannot learn $x^2$ regardless of training time or hyperparameter tuning. Successfully learning this function requires multiple hidden neurons to approximate the non-monotonic behavior.
