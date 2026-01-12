@@ -34,11 +34,11 @@ The goal is to explore:
 
 $$
 \begin{align*}
-n_{1}\mathrm{Input} &= w_1 \cdot x + b_1 \\
-n_{1}\mathrm{Output} &= \text{sigmoid}(n_{1}\mathrm{Input}) \\
-n_{2}\mathrm{Input} &= w_2 \cdot n_{1}\mathrm{Output} + b_2 \\
-n_{2}\mathrm{Output} &= n_{2}\mathrm{Input} \text{ <-- (linear activation)} \\
-\mathrm{output} &= w_3 \cdot n_{2}\mathrm{Output} + b_3
+n_{\text{1Input}} &= w_1 \cdot x + b_1 \\
+n_{\text{1Output}} &= \text{sigmoid}(n_{\text{1Input}}) \\
+n_{\text{2Input}} &= w_2 \cdot n_{\text{1Output}} + b_2 \\
+n_{\text{2Output}} &= n_{\text{2Input}} \text{ <-- (linear activation)} \\
+\text{output} &= w_3 \cdot n_{\text{2Output}} + b_3
 \end{align*}
 $$
 
@@ -66,14 +66,14 @@ $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \text{output}} \cdot n_{2}\mathrm{Output} \\
+\frac{\partial L}{\partial w_3} &= \frac{\partial L}{\partial \text{output}} \cdot n_{\text{2Output}} \\
 \frac{\partial L}{\partial b_3} &= \frac{\partial L}{\partial \text{output}}
 \end{align*}
 $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot n_{1}\mathrm{Output} \\
+\frac{\partial L}{\partial w_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot n_{\text{1Output}} \\
 \frac{\partial L}{\partial b_2} &= \frac{\partial L}{\partial \text{output}} \cdot w_3
 \end{align*}
 $$
@@ -86,8 +86,8 @@ $$
 
 $$
 \begin{align*}
-\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(n_{1}\mathrm{Input}) \\
-\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot \sigma'(n_{1}\mathrm{Input})
+\frac{\partial L}{\partial w_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot x \cdot \sigma'(n_{\text{1Input}}) \\
+\frac{\partial L}{\partial b_1} &= \frac{\partial L}{\partial \text{output}} \cdot w_3 \cdot w_2 \cdot \sigma'(n_{\text{1Input}})
 \end{align*}
 $$
 
