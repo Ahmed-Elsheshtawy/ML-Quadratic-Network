@@ -37,7 +37,7 @@ $$
 \textit{n1Input} &= w_1 \cdot x + b_1 \\
 \textit{n1Output} &= \text{sigmoid}(\textit{n1Input}) \\
 \textit{n2Input} &= w_2 \cdot \textit{n1Output} + b_2 \\
-\textit{n2Output} &= \textit{n2Input} \text{ (linear activation)} \\
+\textit{n2Output} &= \textit{n2Input} \text{ <-- (linear activation)} \\
 \textit{output} &= w_3 \cdot \textit{n2Output} + b_3
 \end{align*}
 $$
